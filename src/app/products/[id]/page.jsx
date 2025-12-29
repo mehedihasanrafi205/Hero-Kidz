@@ -2,6 +2,37 @@ import { getSingleProducts } from "@/actions/server/product";
 import Image from "next/image";
 import { FaShoppingCart, FaStar } from "react-icons/fa";
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const product = await getSingleProducts(id);
+
+  return {
+    title: product.title,
+    description: product.description.slice(0, 160),
+
+    openGraph: {
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: [
+        {
+          url: product.image || "https://i.ibb.co.com/whQSLYbW/image.png",
+          width: 1200,
+          height: 630,
+          alt: product.title,
+        },
+      ],
+      type: "website",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: product.description.slice(0, 160),
+      images: [product.image],
+    },
+  };
+}
+
 const ProductDetailsPage = async ({ params }) => {
   const { id } = await params;
   const product = await getSingleProducts(id);
@@ -19,12 +50,10 @@ const ProductDetailsPage = async ({ params }) => {
     qna,
   } = product;
 
-  const discountedPrice = Math.round(
-    price - (price * discount) / 100
-  );
+  const discountedPrice = Math.round(price - (price * discount) / 100);
 
   return (
-    <div className="container mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
+    <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-10">
       {/* Image */}
       <div className="rounded-xl overflow-hidden">
         <Image
@@ -41,7 +70,7 @@ const ProductDetailsPage = async ({ params }) => {
         <h1 className="text-3xl font-bold mb-3">{title}</h1>
 
         {/* Rating */}
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2  mb-4">
           <div className="flex text-yellow-400">
             {Array.from({ length: 5 }, (_, i) => (
               <FaStar
@@ -61,9 +90,7 @@ const ProductDetailsPage = async ({ params }) => {
             ৳{discountedPrice}
           </span>
           {discount > 0 && (
-            <span className="line-through text-gray-400">
-              ৳{price}
-            </span>
+            <span className="line-through text-gray-400">৳{price}</span>
           )}
         </div>
 
@@ -103,9 +130,7 @@ const ProductDetailsPage = async ({ params }) => {
               {qna.map((item, i) => (
                 <div key={i} className="border rounded-lg p-3">
                   <p className="font-medium">{item.question}</p>
-                  <p className="text-sm text-gray-600 mt-1">
-                    {item.answer}
-                  </p>
+                  <p className="text-sm text-gray-600 mt-1">{item.answer}</p>
                 </div>
               ))}
             </div>

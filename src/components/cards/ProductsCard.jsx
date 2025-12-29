@@ -52,7 +52,7 @@ const ProductCard = ({ product }) => {
           href={`/products/${_id}`}
           className="btn btn-outline btn-primary btn-sm w-full"
         >
-          Details
+          View Details
         </Link>
       </div>
     </div>
