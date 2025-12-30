@@ -8,11 +8,12 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Swal from "sweetalert2";
 import { SocialButtons } from "./SocialButtons";
 import { postUser } from "@/actions/server/auth";
+import { signIn } from "next-auth/react";
 
 export const RegisterForm = () => {
   const params = useSearchParams();
   const router = useRouter();
-  //   const callbackUrl = params.get("callbackUrl") || "/";
+  const callbackUrl = params.get("callbackUrl") || "/";
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -27,8 +28,14 @@ export const RegisterForm = () => {
     e.preventDefault();
     const result = await postUser(form);
     if (result.acknowledged) {
-      alert("Successful. please login");
-      router.push("/login");
+      // router.push("/login");
+      const result = await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        callbackUrl,
+      });
+
+      alert("Successful.");
     }
   };
 
