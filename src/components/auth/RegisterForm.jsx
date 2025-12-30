@@ -27,15 +27,20 @@ export const RegisterForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await postUser(form);
+
     if (result.acknowledged) {
-      // router.push("/login");
       const result = await signIn("credentials", {
         email: form.email,
         password: form.password,
-        callbackUrl,
+        redirect: false,
+        callbackUrl: callbackUrl,
       });
-
-      alert("Successful.");
+      if (result.ok) {
+        Swal.fire("success", "Registered successfully", "success");
+        router.push(callbackUrl);
+      }
+    } else {
+      Swal.fire("erro", "Sorry", "error");
     }
   };
 

@@ -26,7 +26,11 @@ const LoginForm = () => {
     });
 
     if (!result.ok) {
-      Swal.fire("error", "Email password not match", "error");
+      Swal.fire(
+        "error",
+        "Email password not match. Try Google Login / Register",
+        "error"
+      );
     } else {
       Swal.fire("success", " Welcome To Hero Kidz", "success");
 
