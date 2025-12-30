@@ -7,9 +7,9 @@ import { useRouter } from "next/navigation";
 import { SocialButtons } from "./SocialButtons";
 
 const LoginForm = () => {
-  //   const params = useSearchParams();
+  const params = useSearchParams();
   const router = useRouter();
-  //   const callback = params.get("callbackUrl") || "/";
+  const callback = params.get("callbackUrl") || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +22,7 @@ const LoginForm = () => {
       email,
       password,
       redirect: false,
+      callbackUrl: params.get("callbackUrl") || "/",
     });
 
     if (!result.ok) {
@@ -29,7 +30,7 @@ const LoginForm = () => {
     } else {
       Swal.fire("success", " Welcome To Hero Kidz", "success");
 
-      router.push("/");
+      router.push(callback);
     }
   };
 
@@ -65,7 +66,10 @@ const LoginForm = () => {
 
           <p className="text-center text-sm mt-4">
             Don’t have an account?{" "}
-            <Link href={`/register`} className="link link-primary">
+            <Link
+              href={`/register?callbackUrl=${callback}`}
+              className="link link-primary"
+            >
               Register
             </Link>
           </p>
