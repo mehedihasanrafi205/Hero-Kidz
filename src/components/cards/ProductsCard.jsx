@@ -1,6 +1,7 @@
 import { FaStar, FaShoppingCart } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import CartButton from "../buttons/CartButton";
 
 const ProductCard = ({ product }) => {
   const { title, image, price, discount, ratings, reviews, sold, _id } =
@@ -43,10 +44,7 @@ const ProductCard = ({ product }) => {
           )}
         </div>
 
-        <button className="btn btn-primary btn-sm flex items-center justify-center w-full">
-          <FaShoppingCart className="mr-2" />
-          Add
-        </button>
+        <CartButton product={{ ...product, _id: _id.toString() }}></CartButton>
 
         <Link
           href={`/products/${_id}`}
